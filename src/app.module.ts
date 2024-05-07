@@ -6,6 +6,8 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { helpers } from 'handlebars';
 import { join } from 'path';
 import { EmailModule } from '@app/email';
+import { VerificationModule } from './verification/verification.module';
+import { EventModule } from './event/event.module';
 
 require('dotenv').config();
 
@@ -36,6 +38,8 @@ require('dotenv').config();
         },
       })
     }),
+    VerificationModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
