@@ -13,4 +13,10 @@ export class EventController {
   eventCreated(@Body() body: EventCreatedDto) {
     return this.emailService.sendEventCreatedEmail(body);
   }
+
+  @ApiBody({ type: EventCreatedDto })
+  @Post('ticket-purchased')
+  ticketPurchase(@Body() body: EventCreatedDto) {
+    return this.emailService.sendTicketPurchaseEmail(body);
+  }
 }

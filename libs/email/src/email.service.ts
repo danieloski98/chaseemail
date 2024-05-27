@@ -56,12 +56,11 @@ export class EmailService {
     try {
       const emailFeedBack = await this.mailService.sendMail({
         to: payload.email,
-        subject: 'Verify your email',
+        subject: 'Event Created',
         template: join(process.cwd(), 'templates/event-template.hbs'),
         context: {
           email: payload.email,
           greetings: payload.greeting,
-          start: payload.start,
           message: payload.message,
         },
       });
@@ -75,12 +74,11 @@ export class EmailService {
     try {
       const emailFeedBack = await this.mailService.sendMail({
         to: payload.email,
-        subject: 'Verify your email',
+        subject: 'Ticket Purchase Successful',
         template: join(process.cwd(), 'templates/event-template.hbs'),
         context: {
           email: payload.email,
           greetings: payload.greeting,
-          start: payload.start,
           message: payload.message,
         },
       });
