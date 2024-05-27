@@ -17,6 +17,6 @@ export class VerificationController {
   @ApiBody({ type: EmailVerificationDto })
   @Post('send_password_reset_email')
   sendPasswordResetl(@Body() body: EmailVerificationDto) {
-    return this.emailService.sendEmailVerificationOTP(body);
+    return this.emailService.sendPasswordResetOTP(body);
   }
 }

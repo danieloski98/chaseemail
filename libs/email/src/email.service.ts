@@ -33,6 +33,25 @@ export class EmailService {
     }
   }
 
+  async sendPasswordResetOTP(payload: EmailVerificationDto) {
+    try {
+      const emailFeedBack = await this.mailService.sendMail({
+        to: payload.email,
+        subject: 'Reset your password',
+        template: join(process.cwd(), 'templates/passwordReset.hbs'),
+        context: {
+          email: payload.email,
+          greetings: payload.greeting,
+          code: payload.code,
+          message: payload.message,
+        },
+      });
+      this.logger.log(emailFeedBack);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
   async sendEventCreatedEmail(payload: EventCreatedDto) {
     try {
       const emailFeedBack = await this.mailService.sendMail({
