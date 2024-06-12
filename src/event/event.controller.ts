@@ -2,6 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { EmailService } from '@app/email';
 import { EventCreatedDto } from '../../libs/email/dto/EventCreatedDto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { TicketDto } from 'libs/email/dto/TicketDto';
 
 @ApiTags('EVENT')
 @Controller('event')
@@ -18,5 +19,11 @@ export class EventController {
   @Post('ticket-purchased')
   ticketPurchase(@Body() body: EventCreatedDto) {
     return this.emailService.sendTicketPurchaseEmail(body);
+  }
+
+  @ApiBody({ type: TicketDto })
+  @Post('ticket-template')
+  ticketTemplate(@Body() body: TicketDto) {
+    return this.emailService.sendTicketEmail(body);
   }
 }
