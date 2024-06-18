@@ -9,8 +9,8 @@ import { join } from 'path';
 import { EmailVerificationDto } from '../dto/VerificationDto';
 import { EventCreatedDto } from '../dto/EventCreatedDto';
 import { TicketDto } from '../dto/TicketDto';
-// import Cloudinary from 'src/utils/cloudinary';
-// const QRCode = require('qrcode');
+import Cloudinary from 'src/utils/cloudinary';
+const QRCode = require('qrcode');
 
 require('dotenv').config();
 
@@ -109,13 +109,13 @@ export class EmailService {
     } = payload;
     // generate qrcode
     // console.log(QRCode);
-    // const barCode2 = await QRCode.toDataURL(ticketId);
-    // const request = await Cloudinary.uploader.upload(barCode2);
-    // console.log(JSON.stringify(request));
+    const barCode2 = await QRCode.toDataURL(ticketId);
+    const request = await Cloudinary.uploader.upload(barCode2);
+    //console.log(JSON.stringify(request));
 
     try {
       const emailFeedBack = await this.mailService.sendMail({
-        to: payload.email,
+        to: [payload.email],
         subject: 'Ticket Purchase Successful',
         template: join(
           process.cwd(),
@@ -130,7 +130,7 @@ export class EmailService {
           eventName,
           startDate,
           ticketType,
-          barCode,
+          barCode: request.secure_url,
           ticketId,
           id,
         },
