@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,9 +9,9 @@ import { join } from 'path';
 import { EmailModule } from '@app/email';
 import { VerificationModule } from './verification/verification.module';
 import { EventModule } from './event/event.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 require('dotenv').config();
-
 
 @Module({
   imports: [
@@ -36,10 +37,11 @@ require('dotenv').config();
             strict: true,
           },
         },
-      })
+      }),
     }),
     VerificationModule,
     EventModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

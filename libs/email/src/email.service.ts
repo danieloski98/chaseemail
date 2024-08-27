@@ -10,6 +10,7 @@ import { EmailVerificationDto } from '../dto/VerificationDto';
 import { EventCreatedDto } from '../dto/EventCreatedDto';
 import { TicketDto } from '../dto/TicketDto';
 import Cloudinary from 'src/utils/cloudinary';
+import { EventThreeDaysDto } from 'src/event/DTO/EventThreeDaysDto';
 const QRCode = require('qrcode');
 
 require('dotenv').config();
@@ -133,6 +134,56 @@ export class EmailService {
           barCode: request.secure_url,
           ticketId,
           id,
+        },
+      });
+      this.logger.log(emailFeedBack);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async sendThreeDaysReminder(
+    payload: EventThreeDaysDto,
+    email: string,
+    firstName,
+  ) {
+    try {
+      const emailFeedBack = await this.mailService.sendMail({
+        to: email,
+        subject: 'Event Reminder!!!',
+        template: join(process.cwd(), 'templates/event-3days.hbs'),
+        context: {
+          eventTitle: payload.eventTitle,
+          time: payload.time,
+          date: payload.date,
+          creatorName: payload.creatorName,
+          firstName,
+          email,
+        },
+      });
+      this.logger.log(emailFeedBack);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async sendOneDaysReminder(
+    payload: EventThreeDaysDto,
+    email: string,
+    firstName,
+  ) {
+    try {
+      const emailFeedBack = await this.mailService.sendMail({
+        to: email,
+        subject: 'Event Reminder for tomorrow!!!',
+        template: join(process.cwd(), 'templates/event-1day.hbs'),
+        context: {
+          eventTitle: payload.eventTitle,
+          time: payload.time,
+          date: payload.date,
+          creatorName: payload.creatorName,
+          firstName,
+          email,
         },
       });
       this.logger.log(emailFeedBack);
