@@ -5,6 +5,7 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { TicketDto } from 'libs/email/dto/TicketDto';
 import { EventThreeDaysDto } from './DTO/EventThreeDaysDto';
 import { EventService } from './services/event/event.service';
+import { TicketSaleDto } from 'libs/email/dto/TicketSaleDto';
 
 @ApiTags('EVENT')
 @Controller('event')
@@ -42,5 +43,11 @@ export class EventController {
   @Post('one-day-reminder')
   onedaysReminder(@Body() body: EventThreeDaysDto) {
     return this.eventService.handleEmailSendingforOneDay(body);
+  }
+
+  @ApiBody({ type: TicketSaleDto })
+  @Post('ticket-sale')
+  ticketSale(@Body() body: TicketSaleDto) {
+    return this.emailService.sendTicketSaleMail(body, body.email);
   }
 }

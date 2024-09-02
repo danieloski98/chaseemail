@@ -11,6 +11,7 @@ import { EventCreatedDto } from '../dto/EventCreatedDto';
 import { TicketDto } from '../dto/TicketDto';
 import Cloudinary from 'src/utils/cloudinary';
 import { EventThreeDaysDto } from 'src/event/DTO/EventThreeDaysDto';
+import { TicketSaleDto } from '../dto/TicketSaleDto';
 const QRCode = require('qrcode');
 
 require('dotenv').config();
@@ -106,7 +107,7 @@ export class EmailService {
       ticketId,
       ticketType,
       id,
-      barCode,
+      // barCode,
     } = payload;
     // generate qrcode
     // console.log(QRCode);
@@ -184,6 +185,33 @@ export class EmailService {
           creatorName: payload.creatorName,
           firstName,
           email,
+        },
+      });
+      this.logger.log(emailFeedBack);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async sendTicketSaleMail(payload: TicketSaleDto, email: string) {
+    try {
+      const emailFeedBack = await this.mailService.sendMail({
+        to: [
+          email,
+          'opeyemikolawole890@gmail.com',
+          'opeyemi.kolawole@chasescroll.com',
+          'm.neboh@chasescroll.com',
+        ],
+        subject: 'Ticket Sale',
+        template: join(process.cwd(), 'templates/ticket-sale-template.hbs'),
+        context: {
+          name: payload.name,
+          eventName: payload.eventName,
+          eventDescription: payload.eventDescription,
+          eventDate: payload.eventDate,
+          evenTime: payload.evenTime,
+          ticketPrice: payload.ticketPrice <= 0 ? 'Free' : payload.ticketPrice,
+          ticketName: payload.ticketName,
         },
       });
       this.logger.log(emailFeedBack);
